@@ -1,0 +1,9 @@
+spring:
+  h2:
+    console:
+      enabled: true
+
+security:
+  secret-key: asifkazim
+server:
+  port: 8090
