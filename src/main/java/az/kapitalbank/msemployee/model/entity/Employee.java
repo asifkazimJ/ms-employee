@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class Employee {
     @Id
     @GeneratedValue
-    private int empId;
+    private Long empId;
     private String name;
     private String surname;
     private String email;
