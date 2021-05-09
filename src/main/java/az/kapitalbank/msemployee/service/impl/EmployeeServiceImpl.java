@@ -10,15 +10,20 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
-    private EmployeeRepository userRepository;
+    private EmployeeRepository employeeRepository;
 
     @Override
     public Employee addEmployee(Employee employee) {
-        return userRepository.save(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
     public Employee getById(Long id) {
-        return userRepository.findById(id).orElseThrow(null);
+        return employeeRepository.findById(id).orElseThrow(null);
+    }
+
+    @Override
+    public Employee updateEmployee(Employee employee) {
+        return employeeRepository.save(employee);
     }
 }
