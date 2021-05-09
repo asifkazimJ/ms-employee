@@ -23,7 +23,12 @@ public class EmployeeController{
     }
 
     @PutMapping
-    public Employee updateEmployee(@RequestBody Employee user) {
-        return employeeService.updateEmployee(user);
+    public Employee updateEmployee(@RequestBody Employee employee) {
+        return employeeService.updateEmployee(employee);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
     }
 }
