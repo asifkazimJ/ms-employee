@@ -1,12 +1,13 @@
 package az.kapitalbank.msemployee.service;
 
+import az.kapitalbank.msemployee.model.dto.EmployeeRequestDto;
 import az.kapitalbank.msemployee.model.entity.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
 
-    Employee addEmployee(Employee employee);
+    Employee addEmployee(EmployeeRequestDto employeeRequestDto);
 
     Employee getById(Long id);
 

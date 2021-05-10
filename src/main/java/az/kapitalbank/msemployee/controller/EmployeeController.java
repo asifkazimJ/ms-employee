@@ -1,10 +1,12 @@
 package az.kapitalbank.msemployee.controller;
 
+import az.kapitalbank.msemployee.model.dto.EmployeeRequestDto;
 import az.kapitalbank.msemployee.model.entity.Employee;
 import az.kapitalbank.msemployee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,8 +22,8 @@ public class EmployeeController{
     }
 
     @PostMapping("/employee")
-    public Employee addEmployee(@RequestBody Employee employee) {
-        return employeeService.addEmployee(employee);
+    public Employee addEmployee(@Valid @RequestBody EmployeeRequestDto employeeRequestDto) {
+        return employeeService.addEmployee(employeeRequestDto);
     }
 
     @GetMapping("/employee/{id}")
