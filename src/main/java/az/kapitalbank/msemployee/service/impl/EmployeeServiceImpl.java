@@ -3,6 +3,7 @@ package az.kapitalbank.msemployee.service.impl;
 import az.kapitalbank.msemployee.error.DuplicateRecordException;
 import az.kapitalbank.msemployee.error.EmployeeNotFoundException;
 import az.kapitalbank.msemployee.error.ErrorCode;
+import az.kapitalbank.msemployee.model.dto.EmployeeRequestDto;
 import az.kapitalbank.msemployee.model.entity.Employee;
 import az.kapitalbank.msemployee.repository.EmployeeRepository;
 import az.kapitalbank.msemployee.service.EmployeeService;
@@ -21,14 +22,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public Employee addEmployee(Employee employee) {
-        log.info("Employee adding request, employee:{}",employee);
-        Employee existEmployee = employeeRepository.findByEmail(employee.getEmail());
+    public Employee addEmployee(EmployeeRequestDto employeeRequestDto) {
+        log.info("Employee adding request, employeeRequestDto:{}",employeeRequestDto);
+        Employee existEmployee = employeeRepository.findByEmail(employeeRequestDto.getEmail());
         if (existEmployee != null) {
-            log.info("Email is already exist, email:{}",employee.getEmail());
+            log.info("Email is already exist, email:{}",employeeRequestDto.getEmail());
             throw new DuplicateRecordException(ErrorCode.DUPLICATE_RECORD, "Email is already exist");
         }
-        log.info("Employee adding successfully, employee:{}",employee);
+        Employee employee = new Employee();
+        employee.setName(employeeRequestDto.getName());
+        employee.setEmail(employeeRequestDto.getEmail());
+        employee.setSurname(employeeRequestDto.getSurname());
+        employee.setOrganization(employeeRequestDto.getOrganization());
+        employee.setPosition(employeeRequestDto.getPosition());
+        log.info("Employee adding successfully, employeeRequestDto:{}",employeeRequestDto);
         return employeeRepository.save(employee);
     }
 
