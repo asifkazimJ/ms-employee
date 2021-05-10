@@ -1,5 +1,7 @@
 package az.kapitalbank.msemployee.controller;
 
+import az.kapitalbank.msemployee.error.ErrorCode;
+import az.kapitalbank.msemployee.error.InvalidLoginDetailsException;
 import az.kapitalbank.msemployee.model.dto.AuthRequestDto;
 import az.kapitalbank.msemployee.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,8 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
         } catch (Exception ex) {
-            throw new Exception("invalid username or Password");
+            log.info("Invalid Username/Password for username={}", authRequest.getUsername());
+            throw new InvalidLoginDetailsException(ErrorCode.INVALID_LOGIN_DETAILS, "Username not available in our records");
         }
         return jwtUtil.generateToken(authRequest.getUsername());
     }
