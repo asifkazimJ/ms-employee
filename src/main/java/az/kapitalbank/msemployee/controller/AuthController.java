@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String generateToken(@Valid @RequestBody AuthRequestDto authRequest) throws Exception {
+    public String generateToken(@Valid @RequestBody AuthRequestDto authRequest){
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())

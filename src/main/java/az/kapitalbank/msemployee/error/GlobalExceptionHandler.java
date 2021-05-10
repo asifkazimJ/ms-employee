@@ -18,4 +18,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("InvalidLoginDetailsException , error:{}, devMessage:{}", response, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
+
+    @ExceptionHandler(EmployeeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlerEmployeeNotFoundException(EmployeeNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getCode(),ex.getMessage());
+        log.error("EmployeeNotFoundException , error:{}, devMessage:{}", response, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
 }
