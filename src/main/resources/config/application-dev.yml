@@ -1,0 +1,6 @@
+security:
+  token:
+    expiry-date: 300
+    secret-key: asifkazim
+server:
+  port: 8090
