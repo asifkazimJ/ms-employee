@@ -8,6 +8,7 @@ import az.kapitalbank.msemployee.repository.EmployeeRepository;
 import az.kapitalbank.msemployee.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +21,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public Employee addEmployee(Employee employeeDto) {
-        Employee employee = employeeRepository.findByEmail(employeeDto.getEmail());
-        if (employee != null) {
-            throw new DuplicateRecordException(ErrorCode.DUPLICATE_RECORD, "Email id already exist");
+    public Employee addEmployee(Employee employee) {
+        log.info("Employee adding request, employee:{}",employee);
+        Employee existEmployee = employeeRepository.findByEmail(employee.getEmail());
+        if (existEmployee != null) {
+            log.info("Email is already exist, email:{}",employee.getEmail());
+            throw new DuplicateRecordException(ErrorCode.DUPLICATE_RECORD, "Email is already exist");
         }
-        return employeeRepository.save(employeeDto);
+        log.info("Employee adding successfully, employee:{}",employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
@@ -39,12 +43,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee updateEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+        log.info("Employee update request, employee:{}",employee);
+        Employee existEmployee = employeeRepository.findById(employee.getEmpId())
+                .orElseThrow(() -> new EmployeeNotFoundException(
+                        ErrorCode.EMPLOYEE_NOT_FOUND, "Employee not found in our records!")
+                );
+        existEmployee.setName(employee.getName());
+        existEmployee.setEmail(employee.getEmail());
+        existEmployee.setSurname(employee.getSurname());
+        existEmployee.setOrganization(employee.getOrganization());
+        existEmployee.setPosition(employee.getPosition());
+        log.info("Employee adding successfully, employee:{}",employee);
+        return employeeRepository.save(existEmployee);
     }
 
     @Override
     public void deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+        log.info("Employee record deleting for id={}", id);
+        try {
+            employeeRepository.deleteById(id);
+        } catch(EmptyResultDataAccessException ex) {
+            throw new EmployeeNotFoundException(ErrorCode.EMPLOYEE_NOT_FOUND, "Employee not found in our records !");
+        }
+        log.info("Employee record deleted for id={}", id);
     }
 
     @Override
