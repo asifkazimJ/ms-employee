@@ -25,11 +25,6 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @RequestMapping("/")
-    public String welcome() {
-        return "Welcome";
-    }
-
     @PostMapping("/login")
     public String generateToken(@Valid @RequestBody AuthRequestDto authRequest){
         try {
