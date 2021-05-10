@@ -1,5 +1,6 @@
 package az.kapitalbank.msemployee.service.impl;
 
+import az.kapitalbank.msemployee.error.DuplicateRecordException;
 import az.kapitalbank.msemployee.error.EmployeeNotFoundException;
 import az.kapitalbank.msemployee.error.ErrorCode;
 import az.kapitalbank.msemployee.model.entity.Employee;
@@ -19,8 +20,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public Employee addEmployee(Employee employee) {
-        return employeeRepository.save(employee);
+    public Employee addEmployee(Employee employeeDto) {
+        Employee employee = employeeRepository.findByEmail(employeeDto.getEmail());
+        if (employee != null) {
+            throw new DuplicateRecordException(ErrorCode.DUPLICATE_RECORD, "Email id already exist");
+        }
+        return employeeRepository.save(employeeDto);
     }
 
     @Override
@@ -28,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         log.info("Find Employee by id , id : {}", id);
         return employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(
-                        ErrorCode.EMPLOYEE_NOT_FOUND,"Employee not found in our records!")
+                        ErrorCode.EMPLOYEE_NOT_FOUND, "Employee not found in our records!")
                 );
     }
 

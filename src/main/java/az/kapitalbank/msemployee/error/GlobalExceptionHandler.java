@@ -25,4 +25,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("EmployeeNotFoundException , error:{}, devMessage:{}", response, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(DuplicateRecordException.class)
+    public ResponseEntity<ErrorResponse> handlerDuplicateRecordException(DuplicateRecordException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getCode(),ex.getMessage());
+        log.error("DuplicateRecordException , error:{}, devMessage:{}", response, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+
 }
